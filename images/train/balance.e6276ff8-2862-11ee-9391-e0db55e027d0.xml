@@ -1,0 +1,26 @@
+<annotation>
+	<folder>balance</folder>
+	<filename>balance.e6276ff8-2862-11ee-9391-e0db55e027d0.jpg</filename>
+	<path>/home/mcserver/Desktop/ReceiptScanner/Scanner/Tensorflow/workspace/images/collectedimages/balance/balance.e6276ff8-2862-11ee-9391-e0db55e027d0.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1655</width>
+		<height>5250</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>balance</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>8</xmin>
+			<ymin>3650</ymin>
+			<xmax>1655</xmax>
+			<ymax>3770</ymax>
+		</bndbox>
+	</object>
+</annotation>
