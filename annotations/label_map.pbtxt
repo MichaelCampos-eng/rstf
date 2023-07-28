@@ -1,0 +1,16 @@
+item { 
+	name:'balance'
+	id:1
+}
+item { 
+	name:'content'
+	id:2
+}
+item { 
+	name:'details'
+	id:3
+}
+item { 
+	name:'store'
+	id:4
+}
