@@ -16,41 +16,79 @@ class FileTypeError(Exception):
 
 class DataFormat:
 
-    def __init__ (self, image_path: str, labels: str):
-        self.image_path = image_path
+    def __init__ (self, image_raw_path: str, labels: str):
+        self.image_raw_path = image_raw_path
+        self.image_collected_path = os.path.dirname(image_raw_path)
         self.labels = labels
-        self.labels
     
     def rename_files_uuid(self):
+        if not os.path.exists(self.image_collected_path):
+            raise DirectoryError("Directory {} does not exist!".format(self.image_collected_path))
 
-        if not os.path.exists(self.image_path):
-            raise DirectoryError("Directory {} does not exist!".format(self.image_path))
+        for label in self.labels:
 
-        for label in self.labels:                                                         
-            files = os.listdir(os.path.join(self.image_path, label))
+            label_path = os.path.join(self.image_collected_path, label)           
+            files = os.listdir(label_path)
+            if len(files) == 0:
+                raise DirectoryError("Empty directory {}! Add files to it.".format(label_path))
+
             for file in files:
-                if not (".jpg" in file) or not (".xml" in file):
+                if not (".jpg" in file):
                     raise FileTypeError("Invalid file type. Remove or convert to jpg.")
                 if ".jpg" in file:
-                    imgnameNew = os.path.join(self.image_path,label,label+'_'+'{}.jpg'.format(str(uuid.uuid1())))
-                    imgnameOld = os.path.join(self.image_path,label,file)
+                    imgnameNew = os.path.join(self.image_collected_path,label,label+'_'+'{}.jpg'.format(str(uuid.uuid1())))
+                    imgnameOld = os.path.join(self.image_collected_path,label,file)
                     os.rename(imgnameOld, imgnameNew)
+        
+        print("All label files renamed successful.")
+
+    def distribute_raw_to_labels(self):
+        if len(os.listdir(self.image_raw_path)) == 0:
+            raise DirectoryError("Empty directory {}! Add files to it.".format(self.image_raw_path))
+
+        for file in os.listdir(self.image_raw_path):
+            for label in self.labels:
+                destination = os.path.join(self.image_collected_path, label, file)
+                source_copy = os.path.join(self.image_raw_path, f'copy_{file}')
+                shutil.copy(os.path.join(self.image_raw_path, file), source_copy)
+                shutil.move(source_copy, destination)
+    
+
+    def clear_all_labels(self):
+        for label in self.labels:
+            self.clear_directory(label)
+            
+        print("All directories clear successful.")
+
+    def clear_directory(self, directory_name: str):
+        if not os.path.exists(self.image_collected_path):
+            raise DirectoryError("Directory {} does not exist!".format(self.image_collected_path))
+
+
+        dir_path = os.path.join(self.image_collected_path, directory_name)
+        if not os.path.exists(dir_path):
+            raise DirectoryError("Directory {} does not exist!".format(self.image_collected_path))
+
+        for file in os.listdir(dir_path):
+            os.remove(os.path.join(dir_path, file))
+
+        print(f"Clear {dir_path} successful.")
     
     def convert_files_jpeg(self):
+        if not os.path.exists(self.image_raw_path):
+            raise DirectoryError("Images raw directory {} does not exist!".format(self.image_raw_path))
 
-        if not os.path.exists(self.image_path):
-            raise DirectoryError("Images directory {} does not exist!".format(self.image_path))
+        if len(os.listdir(self.image_raw_path)) == 0:
+            raise DirectoryError("Empty directory {}! Add files to it.".format(self.image_raw_path))
 
-        for dir in os.listdir(self.image_path):
-            files = os.listdir(dir)
-            for file in files:
-                if '.pdf' in file:
-                    filePath = os.path.join(dir, file)
-                    images = convert_from_path(filePath)
-                    for i, image in enumerate(images):
-                        jpgName = os.path.join(dir, f'page_{i + 1}.jpg') 
-                        image.save(jpgName, 'JPEG')
-                    os.remove(filePath)
+        for file in os.listdir(self.image_raw_path):
+            if '.pdf' in file:
+                filePath = os.path.join(self.image_raw_path, file)
+                images = convert_from_path(filePath)
+                for i, image in enumerate(images):
+                    jpgName = os.path.join(self.image_raw_path, f'page_{i + 1}.jpg') 
+                    image.save(jpgName, 'JPEG')
+                os.remove(filePath)
 
 class DataPartition:
 
