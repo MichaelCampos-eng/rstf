@@ -1,0 +1,26 @@
+<annotation>
+	<folder>store</folder>
+	<filename>store_6028aa22-33e1-11ee-a805-984827e0aa99.jpg</filename>
+	<path>/home/mcserver/Desktop/machineLearning/projects/rstf/images/collected/store/store_6028aa22-33e1-11ee-a805-984827e0aa99.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1655</width>
+		<height>8224</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>store</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1</xmin>
+			<ymin>314</ymin>
+			<xmax>1655</xmax>
+			<ymax>724</ymax>
+		</bndbox>
+	</object>
+</annotation>

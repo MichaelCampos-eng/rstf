@@ -98,7 +98,7 @@ class DataPartition:
         self.no_training_data = no_training_data
 
     
-    def __move_to(img_path, location_path):
+    def __move_to(self, img_path, location_path):
         xml_path = img_path.replace(".jpg", ".xml")
 
         if not os.path.exists(img_path):
@@ -114,7 +114,7 @@ class DataPartition:
         shutil.move(img_path, location_path)
         shutil.move(xml_path, location_path)
     
-    def __delete_contents(p):
+    def __delete_contents(self, p):
         for file in os.listdir(p):
             os.remove(os.path.join(p, file))
     
@@ -134,15 +134,16 @@ class DataPartition:
         self.__delete_contents(self.testing_path)
         self.__delete_contents(self.training_path)
 
-        threshold = 2 * self.no_training_data
+        count = self.no_training_data
         for label in os.listdir(source_path):
             files = os.listdir(os.path.join(source_path, label))
             numFiles = len(files)
             for file in files:
                 file_path = os.path.join(source_path, label, file)
                 if file.endswith('.jpg'):
-                    if numFiles <= threshold:
+                    if count == 0:
                         self.__move_to(file_path, self.testing_path)
                     else:
                         self.__move_to(file_path, self.training_path)
+                        count -= 1
                     numFiles = len(os.listdir(os.path.join(source_path, label)))

@@ -1,0 +1,26 @@
+<annotation>
+	<folder>content</folder>
+	<filename>content_6028e21c-33e1-11ee-a805-984827e0aa99.jpg</filename>
+	<path>/home/mcserver/Desktop/machineLearning/projects/rstf/images/collected/content/content_6028e21c-33e1-11ee-a805-984827e0aa99.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1655</width>
+		<height>8224</height>
+		<depth>1</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>content</name>
+		<pose>Unspecified</pose>
+		<truncated>1</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>2</xmin>
+			<ymin>1289</ymin>
+			<xmax>1655</xmax>
+			<ymax>3949</ymax>
+		</bndbox>
+	</object>
+</annotation>
