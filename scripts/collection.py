@@ -13,12 +13,22 @@ class FileTypeError(Exception):
         self.message = message
         super().__init__(message)
 
+class ObjectExistError(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(message)
+
+class InputSizeError(Exception):
+    def __init__(self, message):
+        self.message = message
+        super().__init__(message)
+
 
 class DataFormat:
 
-    def __init__ (self, image_raw_path: str, labels: str):
-        self.image_raw_path = image_raw_path
-        self.image_collected_path = os.path.dirname(image_raw_path)
+    def __init__ (self, image_collect_path: str, raw_name: str, labels: str):
+        self.image_raw_path = os.path.join(image_collect_path, raw_name)
+        self.image_collected_path = image_collect_path
         self.labels = labels
     
     def rename_files_uuid(self):
@@ -29,16 +39,14 @@ class DataFormat:
 
             label_path = os.path.join(self.image_collected_path, label)           
             files = os.listdir(label_path)
-            if len(files) == 0:
-                raise DirectoryError("Empty directory {}! Add files to it.".format(label_path))
 
             for file in files:
-                if not (".jpg" in file):
+                if not (file.endswith(".jpg") or file.endswith(".jpeg")):
                     raise FileTypeError("Invalid file type. Remove or convert to jpg.")
-                if ".jpg" in file:
-                    imgnameNew = os.path.join(self.image_collected_path,label,label+'_'+'{}.jpg'.format(str(uuid.uuid1())))
-                    imgnameOld = os.path.join(self.image_collected_path,label,file)
-                    os.rename(imgnameOld, imgnameNew)
+       
+                imgnameNew = os.path.join(self.image_collected_path,label,label+'.'+'{}.jpeg'.format(str(uuid.uuid1())))
+                imgnameOld = os.path.join(self.image_collected_path,label,file)
+                os.rename(imgnameOld, imgnameNew)
         
         print("All label files renamed successful.")
 
@@ -46,12 +54,23 @@ class DataFormat:
         if len(os.listdir(self.image_raw_path)) == 0:
             raise DirectoryError("Empty directory {}! Add files to it.".format(self.image_raw_path))
 
+        for label in self.labels:
+            self.distribute_raw_to_label(label)
+
+
+    def distribute_raw_to_label(self, label: str):
+
+        if not label in self.labels:
+            raise ObjectExistError(f"Label does not not exist in labels: {self.labels}")
+        
+        if len(os.listdir(self.image_raw_path)) == 0:
+            raise DirectoryError("Empty directory {}! Add files to it.".format(self.image_raw_path))
+        
         for file in os.listdir(self.image_raw_path):
-            for label in self.labels:
-                destination = os.path.join(self.image_collected_path, label, file)
-                source_copy = os.path.join(self.image_raw_path, f'copy_{file}')
-                shutil.copy(os.path.join(self.image_raw_path, file), source_copy)
-                shutil.move(source_copy, destination)
+            destination = os.path.join(self.image_collected_path, label, file)
+            source_copy = os.path.join(self.image_raw_path, f'copy_{file}')
+            shutil.copy(os.path.join(self.image_raw_path, file), source_copy)
+            shutil.move(source_copy, destination)
     
 
     def clear_all_labels(self):
@@ -68,7 +87,7 @@ class DataFormat:
         dir_path = os.path.join(self.image_collected_path, directory_name)
         if not os.path.exists(dir_path):
             raise DirectoryError("Directory {} does not exist!".format(self.image_collected_path))
-
+            
         for file in os.listdir(dir_path):
             os.remove(os.path.join(dir_path, file))
 
@@ -119,7 +138,7 @@ class DataPartition:
             os.remove(os.path.join(p, file))
     
 
-    def partition_training_from(self, source_path: str):
+    def partition_training_from(self, source_path: str, labels):
 
         if not os.path.exists(source_path):
             raise DirectoryError("Directory {} does not exist!".format(source_path))
@@ -135,9 +154,16 @@ class DataPartition:
         self.__delete_contents(self.training_path)
 
         count = self.no_training_data
-        for label in os.listdir(source_path):
-            files = os.listdir(os.path.join(source_path, label))
-            numFiles = len(files)
+        for label in labels:
+
+            label_path = os.path.join(source_path, label)
+            if not os.path.exists(label_path):
+                raise DirectoryError("Directory {} does not exist!".format(label_path))
+
+            files = os.listdir(label_path)
+            if len(files) < self.no_training_data:
+                raise InputSizeError(f"Input training size {self.no_training_data} exceeds number of files {len(files)} in label directory {label}")
+
             for file in files:
                 file_path = os.path.join(source_path, label, file)
                 if file.endswith('.jpg'):
@@ -146,4 +172,3 @@ class DataPartition:
                     else:
                         self.__move_to(file_path, self.training_path)
                         count -= 1
-                    numFiles = len(os.listdir(os.path.join(source_path, label)))
