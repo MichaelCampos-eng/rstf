@@ -1,13 +1,13 @@
 <annotation>
-	<folder>store</folder>
+	<folder>train</folder>
 	<filename>store_6028d6a0-33e1-11ee-a805-984827e0aa99.jpg</filename>
-	<path>/home/mcserver/Desktop/machineLearning/projects/rstf/images/collected/store/store_6028d6a0-33e1-11ee-a805-984827e0aa99.jpg</path>
+	<path>/home/mcserver/Desktop/machineLearning/projects/rstf/images/train/store_6028d6a0-33e1-11ee-a805-984827e0aa99.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
 	<size>
-		<width>1655</width>
-		<height>7047</height>
+		<width>413</width>
+		<height>1761</height>
 		<depth>1</depth>
 	</size>
 	<segmented>0</segmented>
@@ -17,10 +17,10 @@
 		<truncated>1</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>1</xmin>
-			<ymin>294</ymin>
-			<xmax>1655</xmax>
-			<ymax>679</ymax>
+			<xmin>3</xmin>
+			<ymin>72</ymin>
+			<xmax>413</xmax>
+			<ymax>171</ymax>
 		</bndbox>
 	</object>
 </annotation>

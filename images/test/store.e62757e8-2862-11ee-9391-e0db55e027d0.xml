@@ -1,13 +1,13 @@
 <annotation>
-	<folder>store</folder>
+	<folder>test</folder>
 	<filename>store.e62757e8-2862-11ee-9391-e0db55e027d0.jpg</filename>
-	<path>/home/mcserver/Desktop/ReceiptScanner/Scanner/Tensorflow/workspace/images/collectedimages/store/store.e62757e8-2862-11ee-9391-e0db55e027d0.jpg</path>
+	<path>/home/mcserver/Desktop/machineLearning/projects/rstf/images/test/store.e62757e8-2862-11ee-9391-e0db55e027d0.jpg</path>
 	<source>
 		<database>Unknown</database>
 	</source>
 	<size>
-		<width>1655</width>
-		<height>5250</height>
+		<width>413</width>
+		<height>1312</height>
 		<depth>1</depth>
 	</size>
 	<segmented>0</segmented>
@@ -17,10 +17,10 @@
 		<truncated>1</truncated>
 		<difficult>0</difficult>
 		<bndbox>
-			<xmin>5</xmin>
-			<ymin>337</ymin>
-			<xmax>1655</xmax>
-			<ymax>743</ymax>
+			<xmin>1</xmin>
+			<ymin>82</ymin>
+			<xmax>413</xmax>
+			<ymax>185</ymax>
 		</bndbox>
 	</object>
 </annotation>
